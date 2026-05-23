@@ -1,0 +1,273 @@
+id: e0b942fc-713a-45c8-84e5-2c74bfc84386
+version: 3
+vcShouldKeepItemLegacyProdMachine: false
+name: Data Collection Sample
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: e555e08c-3063-4fde-8bfa-ab1b6f5301f3
+    type: start
+    task:
+      id: e555e08c-3063-4fde-8bfa-ab1b6f5301f3
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 50
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "1":
+    id: "1"
+    taskid: 75ae5abf-847f-4940-8cca-66ffb7af0c3d
+    type: collection
+    task:
+      id: 75ae5abf-847f-4940-8cca-66ffb7af0c3d
+      version: -1
+      name: Did you attempt to login?
+      type: collection
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "2"
+    separatecontext: false
+    sla:
+      minutes: 0
+      hours: 0
+      days: 2
+      weeks: 0
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 195
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    message:
+      to:
+        simple: pongsakorn.in-on@westcon.com
+      subject:
+        simple: Did you attempt to login?
+      body: null
+      methods:
+      - email
+      format: ""
+      bcc: null
+      cc: null
+      timings:
+        retriescount: 2
+        retriesinterval: 120
+        completeafterreplies: 1
+        completeafterv2: true
+        completeaftersla: true
+    form:
+      questions:
+      - id: "0"
+        label: ""
+        labelarg:
+          simple: Did you attempt to login recently?
+        required: false
+        gridcolumns: []
+        defaultrows: []
+        type: shortText
+        options: []
+        optionsarg: []
+        fieldassociated: ""
+        placeholder: ""
+        tooltip: ""
+        readonly: false
+      title: Please confirm your recent activity.
+      description: ""
+      sender: ""
+      expired: false
+      totalanswers: 0
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "2":
+    id: "2"
+    taskid: 52a1eb08-85a0-4cb4-8c55-ba617c19d5db
+    type: condition
+    task:
+      id: 52a1eb08-85a0-4cb4-8c55-ba617c19d5db
+      version: -1
+      name: User Attempted Login
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "5"
+      "yes":
+      - "4"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isEqualString
+          left:
+            value:
+              complex:
+                root: Please confirm your recent activity.Answers
+                accessor: "0"
+                transformers:
+                - operator: toLowerCase
+            iscontext: true
+          right:
+            value:
+              simple: "yes"
+          ignorecase: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 370
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "4":
+    id: "4"
+    taskid: a7a8a52e-9c19-4802-8610-7f6ba5f8186b
+    type: collection
+    task:
+      id: a7a8a52e-9c19-4802-8610-7f6ba5f8186b
+      version: -1
+      name: Prompt Analyst
+      description: Set a value in context under the key you entered.
+      type: collection
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "5"
+    scriptarguments:
+      key:
+        simple: Count
+      value:
+        simple: '[Count:1,Count:2,Count:3,Count:4,Count:5]'
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 162.5,
+          "y": 545
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    message:
+      to:
+        simple: Analyst
+      subject:
+        simple: Analyst to confirm user risk status
+      body: null
+      methods:
+      - email
+      format: ""
+      bcc: null
+      cc: null
+      timings:
+        retriescount: 2
+        retriesinterval: 360
+        completeafterreplies: 1
+        completeafterv2: true
+        completeaftersla: false
+    form:
+      questions:
+      - id: "0"
+        label: ""
+        labelarg:
+          simple: 'Set user to high risk for user: ${Please confirm your recent activity.Answers}'
+        required: false
+        gridcolumns: []
+        defaultrows: []
+        type: multiSelect
+        options: []
+        optionsarg: []
+        fieldassociated: highriskyusers
+        placeholder: ""
+        tooltip: ""
+        readonly: false
+      title: Set user status to high risk?
+      description: Discuss the login attempt with the user and determine if they are
+        high risk.
+      sender: ""
+      expired: false
+      totalanswers: 0
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "5":
+    id: "5"
+    taskid: d0a7441f-0216-4512-8353-9dbe5608594d
+    type: title
+    task:
+      id: d0a7441f-0216-4512-8353-9dbe5608594d
+      version: -1
+      name: Done
+      type: title
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 720
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 735,
+        "width": 492.5,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs: []
+quiet: true

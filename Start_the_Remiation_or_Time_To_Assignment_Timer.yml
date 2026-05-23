@@ -1,0 +1,192 @@
+id: 25d8ba77-6a1c-4ce9-8d97-29e35da7a27c
+version: 3
+vcShouldKeepItemLegacyProdMachine: false
+name: Start the Remiation or Time To Assignment Timer
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: f70fa276-3a1f-470b-83f8-ea153961e2d1
+    type: start
+    task:
+      id: f70fa276-3a1f-470b-83f8-ea153961e2d1
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 50
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "1":
+    id: "1"
+    taskid: 504879fe-e4c7-4e31-8690-8d228fc48afe
+    type: condition
+    task:
+      id: 504879fe-e4c7-4e31-8690-8d228fc48afe
+      version: -1
+      name: Is there an Owner Assigned?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "2"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isNotEmpty
+          left:
+            value:
+              simple: incident.owner
+            iscontext: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 195
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "2":
+    id: "2"
+    taskid: f484f86b-b123-494d-82c5-b3b1dadaee36
+    type: regular
+    task:
+      id: f484f86b-b123-494d-82c5-b3b1dadaee36
+      version: -1
+      name: Start Remediation Timer
+      description: Prints text to war room (Markdown supported)
+      scriptName: Print
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "4"
+    scriptarguments:
+      value:
+        simple: Starting the Remediation SLA timer, because an owner is already assigned
+          to this incident.
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 370
+        }
+      }
+    note: false
+    timertriggers:
+    - fieldname: remediationsla
+      action: start
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "3":
+    id: "3"
+    taskid: 9ce4684d-868e-4110-829c-68f330161243
+    type: regular
+    task:
+      id: 9ce4684d-868e-4110-829c-68f330161243
+      version: -1
+      name: Start Time To ASsignment TimerUntitled Task
+      description: Prints text to war room (Markdown supported)
+      scriptName: Print
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "4"
+    scriptarguments:
+      value:
+        simple: Starting the time to assignment timer.
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 370
+        }
+      }
+    note: false
+    timertriggers:
+    - fieldname: timetoassignment
+      action: start
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "4":
+    id: "4"
+    taskid: 9410ddde-8e05-4235-8cba-0216417283d8
+    type: title
+    task:
+      id: 9410ddde-8e05-4235-8cba-0216417283d8
+      version: -1
+      name: Done
+      type: title
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 545
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 560,
+        "width": 810,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs: []
+quiet: true

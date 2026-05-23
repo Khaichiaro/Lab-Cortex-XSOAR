@@ -1,0 +1,130 @@
+id: 8bfb87c6-cf19-4ca0-82d9-494d8f8f7edc
+version: 4
+vcShouldKeepItemLegacyProdMachine: false
+name: Challenge Task Sub Playbook Loops
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 38506455-1362-4f08-8ef7-81b91f1b1ccc
+    type: start
+    task:
+      id: 38506455-1362-4f08-8ef7-81b91f1b1ccc
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 50
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "1":
+    id: "1"
+    taskid: 0cbec96f-aa76-4fce-8068-9508e51a1212
+    type: regular
+    task:
+      id: 0cbec96f-aa76-4fce-8068-9508e51a1212
+      version: -1
+      name: Run SIEM Search
+      description: Searches the simulated SIEM for events.
+      script: XSOAR Engineer Training|||xet-siem-search
+      type: regular
+      iscommand: true
+      brand: XSOAR Engineer Training
+    nexttasks:
+      '#none#':
+      - "2"
+    scriptarguments:
+      query:
+        simple: ${inputs.query}
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 195
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "2":
+    id: "2"
+    taskid: 0c1d0495-b52b-42f7-82c2-6c631b10d554
+    type: title
+    task:
+      id: 0c1d0495-b52b-42f7-82c2-6c631b10d554
+      version: -1
+      name: Done
+      type: title
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 370
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 385,
+        "width": 380,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs:
+- key: query
+  value: {}
+  required: true
+  description: ""
+  playbookInputQuery: null
+inputSections:
+- inputs:
+  - query
+  name: General (Inputs group)
+  description: Generic group for inputs
+outputSections:
+- outputs:
+  - siemResult
+  name: General (Outputs group)
+  description: Generic group for outputs
+outputs:
+- contextPath: siemResult
+  type: unknown
+quiet: true
+dirtyInputs: true

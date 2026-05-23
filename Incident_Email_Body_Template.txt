@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Incident Details</h1>
+<table>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+<tr>
+<td>Name</td>
+<td>${incident.name}</td>
+</tr>
+<tr>
+<td>ID</td>
+<td>${incident.id}</td>
+</tr>
+<tr>
+<td>URL Category</td>
+<td>${incident.urlcategory}</td>
+</tr>
+<tr>
+<td>Source Username</td>
+<td>${incident.sourceusername}</td>
+</tr>
+</table>
+</body>
+</html>

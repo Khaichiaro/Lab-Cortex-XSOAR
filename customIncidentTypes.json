@@ -1,0 +1,72 @@
+[
+	{
+		"id": "XSOAR Engineer - URL Alerts",
+		"version": 9,
+		"cacheVersn": 0,
+		"sequenceNumber": 6943566,
+		"primaryTerm": 16,
+		"modified": "2026-05-23T03:17:49.813577703Z",
+		"sizeInBytes": 1363,
+		"packID": "",
+		"packName": "",
+		"itemVersion": "",
+		"fromServerVersion": "",
+		"toServerVersion": "",
+		"definitionId": "",
+		"vcShouldIgnore": false,
+		"vcShouldKeepItemLegacyProdMachine": false,
+		"commitMessage": "",
+		"shouldCommit": false,
+		"locked": false,
+		"name": "XSOAR Engineer - URL Alerts",
+		"prevName": "XSOAR Engineer - URL Alerts",
+		"color": "#b100f5",
+		"sla": 72,
+		"playbookId": "7c2ed5e6-68fa-4d3a-8524-da2d87ead56e",
+		"hours": 0,
+		"days": 3,
+		"weeks": 0,
+		"hoursR": 0,
+		"daysR": 0,
+		"weeksR": 0,
+		"system": false,
+		"readonly": false,
+		"default": false,
+		"autorun": true,
+		"preProcessingScript": "",
+		"closureScript": "3a09dbd7-e304-4c45-86a8-2b6223288f46",
+		"disabled": false,
+		"reputationCalc": 0,
+		"onChangeRepAlg": 0,
+		"layout": "cd8d8691-4003-4448-84f5-baac54a811cf",
+		"detached": false,
+		"extractSettings": {
+			"mode": "Specific",
+			"fieldCliNameToExtractSettings": {
+				"sourceip": {
+					"extractAsIsIndicatorTypeId": "",
+					"isExtractingAllIndicatorTypes": false,
+					"extractIndicatorTypesIDs": [
+						"ipRep",
+						"38a3563d-541b-4145-8b02-5cc3e6c324d1"
+					]
+				},
+				"sourceusername": {
+					"extractAsIsIndicatorTypeId": "",
+					"isExtractingAllIndicatorTypes": false,
+					"extractIndicatorTypesIDs": [
+						"emailRep"
+					]
+				},
+				"suspiciousurl": {
+					"extractAsIsIndicatorTypeId": "",
+					"isExtractingAllIndicatorTypes": false,
+					"extractIndicatorTypesIDs": [
+						"domainRepUnified",
+						"urlRep"
+					]
+				}
+			}
+		}
+	}
+]

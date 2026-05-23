@@ -1,0 +1,118 @@
+id: 58a74cd1-9db5-4712-89e5-6850390333d7
+version: 7
+vcShouldKeepItemLegacyProdMachine: false
+name: Extend Contect Example
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 9ecf9fa4-5926-46bd-8d33-c6698be82870
+    type: start
+    task:
+      id: 9ecf9fa4-5926-46bd-8d33-c6698be82870
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 50
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "1":
+    id: "1"
+    taskid: 361373a3-ea1f-4b2f-8268-5bd4dbf0eeff
+    type: regular
+    task:
+      id: 361373a3-ea1f-4b2f-8268-5bd4dbf0eeff
+      version: -1
+      name: AD Get User
+      description: Retrieves detailed information about a user account. The user can
+        be specified by username, email address, or as an Active Directory Distinguished
+        Name (DN).
+      script: XSOAR Engineer Training|||xet-ad-get-user
+      type: regular
+      iscommand: true
+      brand: XSOAR Engineer Training
+    nexttasks:
+      '#none#':
+      - "2"
+    scriptarguments:
+      email:
+        simple: q@xsoar.local
+      extend-context:
+        simple: UserDisplayName=attributes.displayName.[0]
+      ignore-outputs:
+        simple: "true"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 195
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "2":
+    id: "2"
+    taskid: d20f8a79-7504-4c7b-8f62-35c86411fd20
+    type: title
+    task:
+      id: d20f8a79-7504-4c7b-8f62-35c86411fd20
+      version: -1
+      name: Done
+      type: title
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 370
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 385,
+        "width": 380,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs: []
+quiet: true

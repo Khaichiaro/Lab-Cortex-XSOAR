@@ -1,0 +1,40 @@
+commonfields:
+  id: 3a09dbd7-e304-4c45-86a8-2b6223288f46
+  version: 5
+vcShouldKeepItemLegacyProdMachine: false
+name: CheckOwnerAndNotes
+script: |-
+  #args = demisto.args()
+  #print(json.dumps(args, indent=2))
+
+  #Set variables
+  closing_user = demisto.args().get("closingUserId")
+  close_notes = demisto.args().get("closeNotes")
+  owner = demisto.incident().get("owner")
+
+  #If owner is not assigned, and closing user is not DBot
+  if not owner and closing_user != "DBot":
+      return_error("Assign yourself as the owner before closing the incident")
+
+  #If the closing user is not the owner of the incident
+  #and the closing user is not DBot
+  if owner != closing_user and closing_user != "DBot":
+      return_error("Assign yourself as the owner before closing the incident")
+
+  #If there is no close notes and the closing user is not DBot
+  if not close_notes and closing_user != "DBot":
+      return_error("Please add closing notes")
+type: python
+tags:
+- post-processing
+comment: Check whether an owner is assigned and the close notes field is populated
+  before allowing the incident to close.
+enabled: true
+scripttarget: 0
+subtype: python3
+pswd: ""
+runonce: false
+dockerimage: demisto/python3:3.12.13.9059085
+runas: DBotWeakRole
+engineinfo: {}
+mainengineinfo: {}

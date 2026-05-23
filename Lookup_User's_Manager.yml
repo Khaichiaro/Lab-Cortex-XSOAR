@@ -1,0 +1,287 @@
+id: dedb98c0-fce2-4609-816a-98f2e0c9b990
+version: 23
+vcShouldKeepItemLegacyProdMachine: false
+name: Lookup User's Manager
+description: j
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 986b83b8-0ac5-4017-85e1-236e3edf845b
+    type: start
+    task:
+      id: 986b83b8-0ac5-4017-85e1-236e3edf845b
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 50
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "1":
+    id: "1"
+    taskid: 9babfa36-6cf6-4264-8a5b-b3c47f6c270c
+    type: regular
+    task:
+      id: 9babfa36-6cf6-4264-8a5b-b3c47f6c270c
+      version: -1
+      name: Get User Details
+      description: Retrieves detailed information about a user account. The user can
+        be specified by username, email address, or as an Active Directory Distinguished
+        Name (DN).
+      script: XSOAR Engineer Training|||xet-ad-get-user
+      type: regular
+      iscommand: true
+      brand: XSOAR Engineer Training
+    nexttasks:
+      '#none#':
+      - "2"
+    scriptarguments:
+      email:
+        simple: ${inputs.email}
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 195
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "2":
+    id: "2"
+    taskid: a8d36b0d-92e1-469b-80f6-de542ce73064
+    type: condition
+    task:
+      id: a8d36b0d-92e1-469b-80f6-de542ce73064
+      version: -1
+      name: Does User Have Manager?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "6"
+      "yes":
+      - "3"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isNotEmpty
+          left:
+            value:
+              simple: ActiveDirectory.Users.manager
+            iscontext: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 370
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "3":
+    id: "3"
+    taskid: 56783340-7af5-4520-886c-f9fefa2f406e
+    type: regular
+    task:
+      id: 56783340-7af5-4520-886c-f9fefa2f406e
+      version: -1
+      name: Get User's Manage Details
+      description: Retrieves detailed information about a user account. The user can
+        be specified by username, email address, or as an Active Directory Distinguished
+        Name (DN).
+      script: XSOAR Engineer Training|||xet-ad-get-user
+      type: regular
+      iscommand: true
+      brand: XSOAR Engineer Training
+    nexttasks:
+      '#none#':
+      - "4"
+    scriptarguments:
+      dn:
+        simple: ${ActiveDirectory.Users.manager}
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 545
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "4":
+    id: "4"
+    taskid: c93384ab-a7d4-48f5-87cf-54739bde93a2
+    type: regular
+    task:
+      id: c93384ab-a7d4-48f5-87cf-54739bde93a2
+      version: -1
+      name: Set Manager Info to Context
+      description: Set a value in context under the key you entered.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "7"
+    scriptarguments:
+      key:
+        simple: ManagerInfo
+      value:
+        simple: '{"displayName":${ActiveDirectory.Users.displayName}, "mail":${ActiveDirectory.Users.mail}}'
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 470,
+          "y": 730
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "6":
+    id: "6"
+    taskid: ab51dd41-9f4b-4cfd-8c98-ac20803df0af
+    type: regular
+    task:
+      id: ab51dd41-9f4b-4cfd-8c98-ac20803df0af
+      version: -1
+      name: No Manager Found
+      description: 'The specified user: ${inputs.email} does not appear to have any
+        managers, Pleas ensure that you passed in the correct user address.'
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "7"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 895
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "7":
+    id: "7"
+    taskid: eebe4f67-cb41-48f3-81cf-b25d6eb77fdc
+    type: title
+    task:
+      id: eebe4f67-cb41-48f3-81cf-b25d6eb77fdc
+      version: -1
+      name: Done
+      type: title
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 1070
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1085,
+        "width": 810,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs:
+- key: displayName
+  value:
+    simple: displayName
+  required: true
+  description: ""
+  playbookInputQuery: null
+- key: mail
+  value:
+    simple: mail
+  required: false
+  description: ""
+  playbookInputQuery: null
+inputSections:
+- inputs:
+  - displayName
+  - mail
+  name: managerInfo
+  description: ""
+outputSections:
+- outputs:
+  - managerInfo
+  name: General (Outputs group)
+  description: Generic group for outputs
+outputs:
+- contextPath: managerInfo
+  description: '[Array] Contains manager information'
+  type: unknown
+dirtyInputs: true

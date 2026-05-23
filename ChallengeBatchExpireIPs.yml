@@ -1,0 +1,95 @@
+commonfields:
+  id: b3a7847c-5125-425d-8790-83e3955af898
+  version: 17
+vcShouldKeepItemLegacyProdMachine: false
+name: ChallengeBatchExpireIPs
+script: |-
+  demisto.results("Running batch script to expire older IPs")
+  args = demisto.args()
+
+  #The query variable should store the query that can
+  #be used to retrieve IP type indicators that have a
+  #benign veridct, and are modified more than 1 month
+  #ago.
+
+  # ดึงค่าอาร์กิวเมนต์ size (ถ้าไม่ส่งมา ให้ใช้ค่าเริ่มต้นเป็น 5 ตามโจทย์)
+  args = demisto.args()
+
+  # 1. เขียน Query ค้นหา IP ที่ปลอดภัย (Benign) และถูกแก้ไขมากกว่า 1 เดือนที่แล้ว
+  # ใน XSOAR ใช้ลบเวลาด้วยรูปแบบปี-เดือน-วัน หรือระบุช่วงเวลา
+  #query = '''type:IP and verdict:Benign and modified:>"1 month ago"'''
+  query = '''type:IP and modified:>"1 month ago" and verdict:Benign'''
+  #query = "type:IP and verdict:Benign and modified:<`1 month ago`"
+  #query = """type:IP and verdict:Benign and modified:<`1 month ago`>"""
+
+  indicators_data = execute_command(
+      #Run the findIndicators command with the above
+      #query variable and passing in the size argument.
+
+      # 2. รันคำสั่ง findIndicators เพื่อดึงข้อมูลตาม Query และ Size ที่กำหนด
+      "findIndicators", {"query": query, "size": args['size']}
+  )
+
+  # ตรวจสอบโครงสร้างข้อมูลและดึงรายชื่อ Indicators ออกมา
+  indicators = indicators_data[0].get("Contents", [])
+
+  expire_list = []
+  md_content = "|IP|\n"
+  md_content += "----\n"
+
+  # 3. วนลูปเพื่อสั่ง Expire ตัวชี้วัดแต่ละตัว
+  for item in indicators:
+      #Retrieve the value of each item, then run a command
+      #to expire each of the indicators.
+      #Append the list of indicators to the expire_list.
+      #Also append a row for each of the indicators to the
+      #md_content variable.
+
+      ip_value = item.get("value")
+
+      # สั่งรันคำสั่ง builtin เพื่อตั้งค่าให้ตัวชี้วัดหมดอายุทันที
+      demisto.executeCommand("expireIndicators", {"id": item.get("id"), "expiration": "now"})
+
+      # บันทึกข้อมูลลงใน List และตาราง Markdown
+      expire_list.append(ip_value)
+      md_content += f"|{ip_value}|\n"
+
+  # 4. สร้างโครงสร้าง Entry แบบซับซ้อนตามคู่มือ How To เพื่อบันทึกค่าลงระบบและแสดงผล
+  entry = {
+      #Refer to the
+      #Script Helper > How To > 2.Return result as a complex
+      #entry to the War Room.
+      #Create the entry dictionary by referring to the example
+      #provided in the How To instructions.
+      #Ensure that the indicators are returned as raw data,
+      #and that the expire_list is set in the context data.
+      #Provide the md_content variable as the HumanReadable
+      #value.
+      #Provide other content to return as desired.
+
+      "Type": entryTypes["note"],
+      "Contents": expire_list,
+      "ContentsFormat": formats["json"],
+      "ReadableContentsFormat": formats["markdown"],
+      "HumanReadable": md_content,
+      "EntryContext": {
+          "ExpiredIPs": expire_list
+      }
+  }
+
+  demisto.results(entry)
+type: python
+tags: []
+enabled: true
+args:
+- name: size
+  required: true
+  defaultValue: "5"
+scripttarget: 0
+subtype: python3
+pswd: ""
+runonce: false
+dockerimage: demisto/python3:3.12.13.9059085
+runas: DBotWeakRole
+engineinfo: {}
+mainengineinfo: {}

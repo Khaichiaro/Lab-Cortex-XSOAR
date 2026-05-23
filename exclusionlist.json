@@ -1,0 +1,88 @@
+[
+	{
+		"id": "",
+		"version": 2,
+		"cacheVersn": 0,
+		"sequenceNumber": 950231,
+		"primaryTerm": 3,
+		"modified": "2025-02-24T18:58:29.921753242Z",
+		"sizeInBytes": 403,
+		"sortValues": [
+			"2935"
+		],
+		"value": "*.enterprise.locol*",
+		"type": "regex",
+		"user": "admin@enterprise.local",
+		"reason": "Exclude local domain for Indicators",
+		"whitelistTime": "2025-02-24T18:58:06.448715337Z",
+		"locked": false,
+		"reputations": [
+			"Domain",
+			"DomainGlob",
+			"URL"
+		]
+	},
+	{
+		"id": "",
+		"version": 1,
+		"cacheVersn": 0,
+		"sequenceNumber": 6830957,
+		"primaryTerm": 16,
+		"modified": "2026-05-22T07:45:39.258974971Z",
+		"sizeInBytes": 285,
+		"sortValues": [
+			"6967"
+		],
+		"value": "10.0.0.0/8",
+		"type": "CIDR",
+		"user": "admin@enterprise.local",
+		"reason": "Private IP address range",
+		"whitelistTime": "2026-05-22T07:45:39.258965777Z",
+		"locked": false,
+		"reputations": [
+			"IP"
+		]
+	},
+	{
+		"id": "",
+		"version": 1,
+		"cacheVersn": 0,
+		"sequenceNumber": 6833144,
+		"primaryTerm": 16,
+		"modified": "2026-05-22T08:08:18.173503954Z",
+		"sizeInBytes": 265,
+		"sortValues": [
+			"7059"
+		],
+		"value": "192.168.0.0/16",
+		"type": "CIDR",
+		"user": "admin@enterprise.local",
+		"reason": "",
+		"whitelistTime": "2026-05-22T08:08:18.173496613Z",
+		"locked": false,
+		"reputations": [
+			"IP"
+		]
+	},
+	{
+		"id": "",
+		"version": 1,
+		"cacheVersn": 0,
+		"sequenceNumber": 6833193,
+		"primaryTerm": 16,
+		"modified": "2026-05-22T08:08:44.6923597Z",
+		"sizeInBytes": 262,
+		"sortValues": [
+			"7111"
+		],
+		"value": "172.16.0.0/16",
+		"type": "CIDR",
+		"user": "admin@enterprise.local",
+		"reason": "",
+		"whitelistTime": "2026-05-22T08:08:44.692351257Z",
+		"locked": false,
+		"reputations": [
+			"IP"
+		]
+	}
+]

@@ -1,0 +1,50 @@
+commonfields:
+  id: d10d0f91-9acd-4243-8749-b7e276f7d7c2
+  version: 4
+vcShouldKeepItemLegacyProdMachine: false
+name: TTABreach
+script: |-
+  #Retrieve the incident ID
+  incident_id = demisto.incident().get("id")
+
+  #Retrieve the incident name
+  incident_name = demisto.incident().get("name")
+
+  #Retrieve the severity
+  #0 = Unknown, 0.5 = Informational, 1 = Low, 2 = Medium, 3 = High, 4 = Critical
+  severity = demisto.incident().get("severity")
+
+  #Retrieve a list of URLs and print it
+  #print(json.dumps(demisto.demistoUrls(), indent=2))
+
+  #Retrieve a list of URLs
+  investigation_url = demisto.demistoUrls().get("investigation")
+
+  #Compose an email if the severity meets or exceeds the high level
+  if severity >= 3:
+      subject = f"Incident {incident_id}: {incident_name} TTA SLA Breached!"
+      body = f"Assign an owner to the incident. Link: {investigation_url}"
+      email_address = "soclead@xsoar.local"
+
+      return_results(
+          demisto.executeCommand("xet-send-mail",
+              {"to": email_address, "subject": subject, "body": body}
+          )
+      )
+      print(f"Email sent with subject: {subject} and body: {body}")
+      demisto.setContext("TTABreach.body", body)
+      demisto.setContext("TTABreach.subject", subject)
+      demisto.setContext("TTABreach.email", email_address)
+type: python
+tags:
+- sla
+comment: Notifies the SOC lead if the Time to Assignment Timer SLA is breached.
+enabled: true
+scripttarget: 0
+subtype: python3
+pswd: ""
+runonce: false
+dockerimage: demisto/python3:3.12.13.9059085
+runas: DBotWeakRole
+engineinfo: {}
+mainengineinfo: {}

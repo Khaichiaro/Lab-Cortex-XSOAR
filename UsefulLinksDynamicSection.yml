@@ -1,0 +1,27 @@
+commonfields:
+  id: d5a1f52c-e4d2-4a45-835b-cd6ecd7685a0
+  version: 9
+vcShouldKeepItemLegacyProdMachine: false
+name: UsefulLinksDynamicSection
+script: |-
+  links = demisto.executeCommand(
+      "getList", {"listName":"UsefulLinks"}
+      )[0]["Contents"]
+  #print(json.dumps(links, indent=2))
+
+  result = CommandResults(readable_output=links, ignore_auto_extract=True)
+  return_results(result)
+type: python
+tags:
+- dynamic-section
+comment: Dynamic section to display useful links in a markdown table in an incident
+  layout.
+enabled: true
+scripttarget: 0
+subtype: python3
+pswd: ""
+runonce: false
+dockerimage: demisto/python3:3.12.13.9059085
+runas: DBotWeakRole
+engineinfo: {}
+mainengineinfo: {}

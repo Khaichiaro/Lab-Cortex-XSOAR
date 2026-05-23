@@ -1,0 +1,5 @@
+| Link | Description |
+|------|-------------|
+| [XSOAR AdminDocs](https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/8/Cortex-XSOAR-Cloud-Documentation/Get-Started-with-Cortex-XSOAR) | XSOAR Admin Guide |
+| [Palo Alto Networks Support](https://support.paloaltonetworks.com/) | PANW Support |
+| [Playbook Github](https://github.com) | Playbook Github |

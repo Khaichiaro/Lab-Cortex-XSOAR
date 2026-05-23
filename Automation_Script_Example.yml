@@ -1,0 +1,117 @@
+id: 6a8af063-03e9-4db5-8a2c-89cc4899e4a4
+version: 4
+vcShouldKeepItemLegacyProdMachine: false
+name: Automation Script Example
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 026dc073-c6df-4194-8b4b-2bfdb5e50027
+    type: start
+    task:
+      id: 026dc073-c6df-4194-8b4b-2bfdb5e50027
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 50
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "1":
+    id: "1"
+    taskid: 5ad3b113-f13d-4116-8d97-0f0eda8706f5
+    type: regular
+    task:
+      id: 5ad3b113-f13d-4116-8d97-0f0eda8706f5
+      version: -1
+      name: GetUserAndManager
+      description: Lookup a User and the User’s Manager using the User’s Email address.
+      scriptName: GetUserAndManager
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "2"
+    scriptarguments:
+      email:
+        simple: q@xsaoar.local
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 195
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "2":
+    id: "2"
+    taskid: f00b118f-0d8e-453b-8390-2027f0264eba
+    type: regular
+    task:
+      id: f00b118f-0d8e-453b-8390-2027f0264eba
+      version: -1
+      name: Print Outputs
+      description: Prints text to war room (Markdown supported)
+      scriptName: Print
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      value:
+        simple: ${UserAndManager.UserName}${UserAndManager.ManagerName}${UserAndManager.ManagerEmail}
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 370
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 415,
+        "width": 380,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs: []
+quiet: true

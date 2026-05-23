@@ -1,0 +1,104 @@
+[{
+	"brands": null,
+	"cacheVersn": 0,
+	"defaultIncidentType": "",
+	"definitionId": "",
+	"description": "",
+	"feed": false,
+	"fromServerVersion": "",
+	"id": "8bd4fae3-281e-4e51-8df9-9de15a724873",
+	"incidentSamples": null,
+	"indicatorSamples": null,
+	"instanceIds": null,
+	"itemVersion": "",
+	"keyTypeMap": {
+		"url allowed": "XSOAR Engineer - URL Alerts",
+		"url blocked": "XSOAR Engineer - URL Alerts"
+	},
+	"locked": false,
+	"logicalVersion": 0,
+	"mapping": null,
+	"name": "XSOAR Engineer Incident Classifier",
+	"nameRaw": "XSOAR Engineer Incident Classifier",
+	"packID": "",
+	"packName": "",
+	"propagationLabels": [
+		"all"
+	],
+	"sourceClassifierId": "",
+	"system": false,
+	"toServerVersion": "",
+	"transformer": {
+		"simple": "type"
+	},
+	"type": "classification",
+	"unclassifiedCases": null,
+	"version": -1
+},{
+	"brands": null,
+	"cacheVersn": 0,
+	"defaultIncidentType": "",
+	"definitionId": "",
+	"description": "",
+	"feed": false,
+	"fromServerVersion": "",
+	"id": "99d9148d-b967-4031-8b82-1bd6cbe60bb8",
+	"incidentSamples": null,
+	"indicatorSamples": null,
+	"instanceIds": null,
+	"itemVersion": "",
+	"keyTypeMap": {},
+	"locked": false,
+	"logicalVersion": 0,
+	"mapping": {
+		"XSOAR Engineer - URL Alerts": {
+			"dontMapEventToLabels": true,
+			"internalMapping": {
+				"Event ID": {
+					"simple": "eventID"
+				},
+				"Event Type": {
+					"simple": "type"
+				},
+				"Source IP": {
+					"simple": "sourceIP"
+				},
+				"Source Username": {
+					"simple": "sourceUser"
+				},
+				"Suspicious URL": {
+					"simple": "url"
+				},
+				"URL Category": {
+					"complex": {
+						"filters": [],
+						"root": "urlCategory",
+						"transformers": [
+							{
+								"operator": "toLowerCase"
+							}
+						]
+					}
+				}
+			}
+		},
+		"dbot_classification_incident_type_all": {
+			"dontMapEventToLabels": true,
+			"internalMapping": {}
+		}
+	},
+	"name": "XSOAR Engineer Incoming Mapper",
+	"nameRaw": "XSOAR Engineer Incoming Mapper",
+	"packID": "",
+	"packName": "",
+	"propagationLabels": [
+		"all"
+	],
+	"sourceClassifierId": "",
+	"system": false,
+	"toServerVersion": "",
+	"transformer": {},
+	"type": "mapping-incoming",
+	"unclassifiedCases": null,
+	"version": -1
+}]

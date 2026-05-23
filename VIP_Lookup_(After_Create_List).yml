@@ -1,0 +1,227 @@
+id: 43e9c3da-2488-4626-8828-d8324fffcb86
+version: 4
+vcShouldKeepItemLegacyProdMachine: false
+name: VIP Lookup (After Create List)
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 77eb6365-8464-42a7-8e4f-1928405d923f
+    type: start
+    task:
+      id: 77eb6365-8464-42a7-8e4f-1928405d923f
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 50
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "1":
+    id: "1"
+    taskid: 1adc4d0d-7a8b-45e8-865c-24352b3fa721
+    type: regular
+    task:
+      id: 1adc4d0d-7a8b-45e8-865c-24352b3fa721
+      version: -1
+      name: AD Get User
+      description: Retrieves detailed information about a user account. The user can
+        be specified by username, email address, or as an Active Directory Distinguished
+        Name (DN).
+      script: XSOAR Engineer Training|||xet-ad-get-user
+      type: regular
+      iscommand: true
+      brand: XSOAR Engineer Training
+    nexttasks:
+      '#none#':
+      - "2"
+    scriptarguments:
+      email:
+        simple: q@xsoar.local
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 195
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "2":
+    id: "2"
+    taskid: b201d98e-fc7d-46b4-8525-e273a0c4f5a9
+    type: condition
+    task:
+      id: b201d98e-fc7d-46b4-8525-e273a0c4f5a9
+      version: -1
+      name: Check if VIP
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "4"
+      "yes":
+      - "3"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: inList
+          left:
+            value:
+              simple: ActiveDirectory.Users.mail
+            iscontext: true
+          right:
+            value:
+              simple: lists.VIP List
+            iscontext: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 370
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "3":
+    id: "3"
+    taskid: 41f3ad16-f3d7-41ce-8f26-a0556eb810d7
+    type: regular
+    task:
+      id: 41f3ad16-f3d7-41ce-8f26-a0556eb810d7
+      version: -1
+      name: VIP
+      description: Prints text to war room (Markdown supported)
+      scriptName: Print
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "5"
+    scriptarguments:
+      value:
+        simple: ${ActiveDirectory.Users.mail} IS VIP!!!
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 545
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "4":
+    id: "4"
+    taskid: a994e02c-ed01-4004-804f-d8238a7fa04d
+    type: regular
+    task:
+      id: a994e02c-ed01-4004-804f-d8238a7fa04d
+      version: -1
+      name: Poor Guy
+      description: Prints text to war room (Markdown supported)
+      scriptName: Print
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "5"
+    scriptarguments:
+      value:
+        simple: ${ActiveDirectory.Users.mail} IS POOR GUY BURHH
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 545
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "5":
+    id: "5"
+    taskid: a6756ae6-4bc9-4e62-8837-5f3cc0455904
+    type: title
+    task:
+      id: a6756ae6-4bc9-4e62-8837-5f3cc0455904
+      version: -1
+      name: Done
+      type: title
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 720
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 735,
+        "width": 810,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs: []

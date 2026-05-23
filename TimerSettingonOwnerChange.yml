@@ -1,0 +1,35 @@
+commonfields:
+  id: 045b7672-c610-4ad1-80b9-6dfdcbbe285c
+  version: 5
+vcShouldKeepItemLegacyProdMachine: false
+name: TimerSettingonOwnerChange
+script: |-
+  #print(json.dumps(demisto.args(), indent=2))
+
+  #Save the old and new arguments from the field change
+  old = demisto.args().get("old")
+  new = demisto.args().get("new")
+
+  #If there was no owner and a new owner is assigned
+  if not old and new:
+      demisto.executeCommand("pauseTimer", {"timerField": "timetoassignment"})
+      demisto.executeCommand("startTimer", {"timerField": "remediationsla"})
+      return_results("timetoassignment timer paused, remediationsla timer started")
+
+  #If an owner was removed and new one was not assigned
+  if old and not new:
+      demisto.executeCommand("pauseTimer", {"timerField": "remediationsla"})
+      demisto.executeCommand("startTimer", {"timerField": "timetoassignment"})
+      return_results("remediationsla timer paused, timetoassignment timer started")
+type: python
+tags:
+- field-change-triggered
+enabled: true
+scripttarget: 0
+subtype: python3
+pswd: ""
+runonce: false
+dockerimage: demisto/python3:3.12.13.9059085
+runas: DBotWeakRole
+engineinfo: {}
+mainengineinfo: {}

@@ -1,0 +1,898 @@
+id: 7c2ed5e6-68fa-4d3a-8524-da2d87ead56e
+version: 22
+vcShouldKeepItemLegacyProdMachine: false
+name: URL Alerts Core Playbook
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 9f39fd31-86ff-4a63-81c3-a8fb597f8a36
+    type: start
+    task:
+      id: 9f39fd31-86ff-4a63-81c3-a8fb597f8a36
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 592.5,
+          "y": 50
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "1":
+    id: "1"
+    taskid: ab823b51-0ddb-4073-8b3d-449c6d694074
+    type: regular
+    task:
+      id: ab823b51-0ddb-4073-8b3d-449c6d694074
+      version: -1
+      name: Lookup AD User
+      description: Retrieves detailed information about a user account. The user can
+        be specified by username, email address, or as an Active Directory Distinguished
+        Name (DN).
+      script: XSOAR Engineer Training|||xet-ad-get-user
+      type: regular
+      iscommand: true
+      brand: XSOAR Engineer Training
+    nexttasks:
+      '#none#':
+      - "22"
+    scriptarguments:
+      email:
+        complex:
+          root: incident
+          accessor: sourceusername
+          transformers:
+          - operator: toLowerCase
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 592.5,
+          "y": 195
+        }
+      }
+    note: true
+    timertriggers: []
+    ignoreworker: false
+    fieldMapping:
+    - incidentfield: Employee Display Name
+      output:
+        complex:
+          root: ActiveDirectory.Users
+          accessor: displayName
+          transformers:
+          - operator: FirstArrayElement
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "2":
+    id: "2"
+    taskid: 0e601e99-8e06-4fa5-8d14-4ff5ea99eea1
+    type: condition
+    task:
+      id: 0e601e99-8e06-4fa5-8d14-4ff5ea99eea1
+      version: -1
+      name: Is the user an Agent or Manager?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "4"
+      "yes":
+      - "3"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: containsString
+          left:
+            value:
+              simple: ActiveDirectory.Users.memberOf
+            iscontext: true
+          right:
+            value:
+              simple: Agents
+          ignorecase: true
+        - operator: containsString
+          left:
+            value:
+              simple: ActiveDirectory.Users.memberOf
+            iscontext: true
+          right:
+            value:
+              simple: Managers
+          ignorecase: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 592.5,
+          "y": 895
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "3":
+    id: "3"
+    taskid: 561e9037-e242-4c5a-884a-2030e8c6e0b7
+    type: regular
+    task:
+      id: 561e9037-e242-4c5a-884a-2030e8c6e0b7
+      version: -1
+      name: Set Severity to High
+      description: commands.local.cmd.set.incident
+      script: Builtin|||setIncident
+      type: regular
+      iscommand: true
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "5"
+    scriptarguments:
+      severity:
+        simple: "3"
+      sla:
+        simple: "120"
+      slaField:
+        simple: timetoassignment
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 377.5,
+          "y": 1070
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "4":
+    id: "4"
+    taskid: bb9b5de0-dabc-488e-85d1-2ca42b6fc5dd
+    type: regular
+    task:
+      id: bb9b5de0-dabc-488e-85d1-2ca42b6fc5dd
+      version: -1
+      name: Set Severity to Medium
+      description: commands.local.cmd.set.incident
+      script: Builtin|||setIncident
+      type: regular
+      iscommand: true
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "5"
+    scriptarguments:
+      severity:
+        simple: "2"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 807.5,
+          "y": 1070
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "5":
+    id: "5"
+    taskid: 81cdf187-4a13-4a87-803e-82f3e91ddc9a
+    type: condition
+    task:
+      id: 81cdf187-4a13-4a87-803e-82f3e91ddc9a
+      version: -1
+      name: Is a malicious indicator found?
+      description: Checks if the investigation found any malicious indicators (file,
+        URL, IP address, domain, or email). Returns "yes" if at least one malicious
+        indicator is found.
+      scriptName: IsMaliciousIndicatorFound
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "no":
+      - "7"
+      "yes":
+      - "6"
+    scriptarguments:
+      maliciousQueryOverride:
+        simple: '(type: Domian or type: URL) and (verdict: Malicious or verdict: Suspicious)'
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 592.5,
+          "y": 1245
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "6":
+    id: "6"
+    taskid: 3e7da384-b4c9-410a-8486-356926d9302c
+    type: title
+    task:
+      id: 3e7da384-b4c9-410a-8486-356926d9302c
+      version: -1
+      name: Remediation
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "11"
+      - "19"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 807.5,
+          "y": 1420
+        }
+      }
+    note: false
+    timertriggers:
+    - fieldname: remediationsla
+      action: start
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "7":
+    id: "7"
+    taskid: ad5058b8-af84-44a6-8e60-6b147e476172
+    type: title
+    task:
+      id: ad5058b8-af84-44a6-8e60-6b147e476172
+      version: -1
+      name: Analyst Review
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "27"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 1580
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "8":
+    id: "8"
+    taskid: 07e21e18-3b9c-407f-89de-2287c2cc73dc
+    type: condition
+    task:
+      id: 07e21e18-3b9c-407f-89de-2287c2cc73dc
+      version: -1
+      name: Conduct Manual Review
+      description: |-
+        # Analyst Review Process
+        Follow the process below if you have been assigned this task.
+
+        ## Process
+        1. Review the incident details
+        2. Identify the URL indicator and copy the value
+        3. Open a sandbox environment and navigate to the URL
+        4. Determine if the URL is malicious
+        5. Proceed with the usual remediation steps based on the results
+        [cite_start]
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      False Positive:
+      - "9"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 1915
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "9":
+    id: "9"
+    taskid: cefe9d01-cfb7-4f48-8b32-68a9cd58b699
+    type: regular
+    task:
+      id: cefe9d01-cfb7-4f48-8b32-68a9cd58b699
+      version: -1
+      name: Close as False Positive
+      description: commands.local.cmd.close.inv
+      script: Builtin|||closeInvestigation
+      type: regular
+      iscommand: true
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "10"
+    scriptarguments:
+      closeNotes:
+        simple: False Positive
+      closeReason:
+        simple: False Positive
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 2090
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "10":
+    id: "10"
+    taskid: 63eb7baa-3082-4285-8f15-f541a5f1b8d4
+    type: title
+    task:
+      id: 63eb7baa-3082-4285-8f15-f541a5f1b8d4
+      version: -1
+      name: Done
+      type: title
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 2265
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "11":
+    id: "11"
+    taskid: 4b21155c-8e62-4021-8c7d-a86edb88a9ef
+    type: regular
+    task:
+      id: 4b21155c-8e62-4021-8c7d-a86edb88a9ef
+      version: -1
+      name: Validate Indicators for Blocking
+      description: |-
+        Searches Cortex XSOAR Indicators.
+
+        Search for XSOAR Indicators and returns the id, indicator_type, value, and score/verdict.
+
+        You can add additional fields from the indicators using the add_field_to_context argument.
+      scriptName: SearchIndicator
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "13"
+      - "14"
+    scriptarguments:
+      query:
+        simple: '(type: Domian or type: URL) and (verdict: Malicious or verdict: Suspicious)
+          and incident.id: ${incident.id}'
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 1915
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "13":
+    id: "13"
+    taskid: 34a03694-fd7d-44c1-8b1f-d6a4511caaa9
+    type: condition
+    task:
+      id: 34a03694-fd7d-44c1-8b1f-d6a4511caaa9
+      version: -1
+      name: Are there any Found Indicators?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "10"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isExists
+          left:
+            value:
+              simple: foundIndicators
+            iscontext: true
+      - - operator: isNotEmpty
+          left:
+            value:
+              simple: foundIndicators
+            iscontext: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 2090
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "14":
+    id: "14"
+    taskid: 3c08baf6-3406-40df-8d07-bd01422de953
+    type: regular
+    task:
+      id: 3c08baf6-3406-40df-8d07-bd01422de953
+      version: -1
+      name: Tag Indicators for Blocking
+      description: commands.local.cmd.add.values.to.indicator.multi.select.field
+      script: Builtin|||appendIndicatorField
+      type: regular
+      iscommand: true
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "10"
+    scriptarguments:
+      field:
+        simple: tags
+      fieldValue:
+        simple: approved_block
+      indicatorsValues:
+        simple: ${foundIndicators.value}
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 2090
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "18":
+    id: "18"
+    taskid: 7a18d428-5090-44eb-8714-8224fe95bff3
+    type: regular
+    task:
+      id: 7a18d428-5090-44eb-8714-8224fe95bff3
+      version: -1
+      name: Notify User
+      description: |-
+        # Notify User Analyst Instructions
+        Notify the affected user: ${ActiveDirectory.Users.sAMAccountName}
+        That their password has changed to: ${NEW_PASSWORD}
+
+        Complete this task to indicate this has been completed.
+        [cite_start]
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "10"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 1452.5,
+          "y": 2090
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "19":
+    id: "19"
+    taskid: e5a65633-09ed-4b17-844c-bd074371b272
+    type: playbook
+    task:
+      id: e5a65633-09ed-4b17-844c-bd074371b272
+      version: -1
+      name: Password Reset Sub-Playbook
+      description: Sub-playbook that will reset and optionally expire a user's password
+        using the XSOAR Sub-playbook that will reset and optionally expire a user's
+        password using the XSOAR Engineer Training integration.Engineer Training integration.
+      playbookName: Password Reset Sub-Playbook
+      type: playbook
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "24"
+    scriptarguments:
+      expirePassword:
+        simple: "yes"
+      samAccountName:
+        simple: ${ActiveDirectory.Users.sAMAccountName}
+    separatecontext: true
+    continueonerrortype: ""
+    loop:
+      iscommand: false
+      exitCondition: ""
+      wait: 1
+      max: 100
+    view: |-
+      {
+        "position": {
+          "x": 1237.5,
+          "y": 1565
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "21":
+    id: "21"
+    taskid: ca563a39-912c-49a0-83b3-d3eb1e771865
+    type: condition
+    task:
+      id: ca563a39-912c-49a0-83b3-d3eb1e771865
+      version: -1
+      name: Has a Manager?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "23"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isNotEmpty
+          left:
+            value:
+              simple: managerInfo
+            iscontext: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 592.5,
+          "y": 545
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "22":
+    id: "22"
+    taskid: fc979e61-1917-4625-8452-d6999a401758
+    type: playbook
+    task:
+      id: fc979e61-1917-4625-8452-d6999a401758
+      version: -1
+      name: Lookup User's Manager2
+      playbookName: Lookup User's Manager2
+      type: playbook
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "21"
+    scriptarguments:
+      email:
+        simple: ${incident.sourceusername}
+    separatecontext: true
+    continueonerrortype: ""
+    loop:
+      iscommand: false
+      exitCondition: ""
+      wait: 1
+      max: 100
+    view: |-
+      {
+        "position": {
+          "x": 592.5,
+          "y": 370
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "23":
+    id: "23"
+    taskid: 99354cac-8822-467a-820a-58536cb15d83
+    type: regular
+    task:
+      id: 99354cac-8822-467a-820a-58536cb15d83
+      version: -1
+      name: Set Manager Name and Email to Incident Fields
+      description: commands.local.cmd.set.incident
+      script: Builtin|||setIncident
+      type: regular
+      iscommand: true
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "2"
+    scriptarguments:
+      manageremailaddress:
+        simple: ${mail}
+      managername:
+        simple: ${displayName}
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 705,
+          "y": 720
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "24":
+    id: "24"
+    taskid: 029ad6cf-c0c8-4b7f-85b9-268661add5ff
+    type: condition
+    task:
+      id: 029ad6cf-c0c8-4b7f-85b9-268661add5ff
+      version: -1
+      name: Is there a Manager to Notify?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "18"
+      "yes":
+      - "25"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isExists
+          left:
+            value:
+              simple: managerInfo
+            iscontext: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 1452.5,
+          "y": 1740
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "25":
+    id: "25"
+    taskid: 585d4499-e97f-4df9-8a6c-e0656fe2ac43
+    type: regular
+    task:
+      id: 585d4499-e97f-4df9-8a6c-e0656fe2ac43
+      version: -1
+      name: Send Email to Manager
+      description: Send an email. (Doesn't actually send an email.)
+      script: XSOAR Engineer Training|||xet-send-mail
+      type: regular
+      iscommand: true
+      brand: XSOAR Engineer Training
+    nexttasks:
+      '#none#':
+      - "18"
+    scriptarguments:
+      body:
+        simple: This is an informational email to notify you that ${mail}  from your
+          organization has had their password reset automatically. The user should
+          have been contacted by IT with this information and the new password. Please
+          contact IT if they are still having trouble accessing their systems.
+      to:
+        complex:
+          root: mail
+          transformers:
+          - operator: FirstArrayElement
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 1565,
+          "y": 1915
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "26":
+    id: "26"
+    taskid: db332a76-debf-4c73-8d8c-1b5d34cd631a
+    type: playbook
+    task:
+      id: db332a76-debf-4c73-8d8c-1b5d34cd631a
+      version: -1
+      name: Password Reset Sub-Playbook2 SAMACcount
+      playbookName: Password Reset Sub-Playbook2 SAMACcount
+      type: playbook
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "24"
+    separatecontext: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 1667.5,
+          "y": 1565
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "27":
+    id: "27"
+    taskid: e3bfc62c-45de-4590-84dd-4e2365f15259
+    type: playbook
+    task:
+      id: e3bfc62c-45de-4590-84dd-4e2365f15259
+      version: -1
+      name: Start the Remiation or Time To Assignment Timer
+      playbookName: Start the Remiation or Time To Assignment Timer
+      type: playbook
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "8"
+    separatecontext: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 1740
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 2280,
+        "width": 1997.5,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs: []

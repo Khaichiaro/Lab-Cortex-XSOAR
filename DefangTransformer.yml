@@ -1,0 +1,29 @@
+commonfields:
+  id: d7aaf7a4-1444-4388-814c-94df8098dd2d
+  version: 2
+vcShouldKeepItemLegacyProdMachine: false
+name: DefangTransformer
+script: |-
+  value = demisto.args().get("value")
+
+  #Defang by replacing http with hxxp and . with [.]
+  value = value.replace("http", "hxxp")
+  value = value.replace(".", "[.]")
+
+  #A transformer script must always return a result
+  return_results(value)
+type: python
+tags:
+- transformer
+comment: Defang a URL or TP address
+enabled: true
+args:
+- name: value
+scripttarget: 0
+subtype: python3
+pswd: ""
+runonce: false
+dockerimage: demisto/python3:3.12.13.9059085
+runas: DBotWeakRole
+engineinfo: {}
+mainengineinfo: {}

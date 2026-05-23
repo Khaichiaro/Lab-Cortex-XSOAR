@@ -1,0 +1,106 @@
+commonfields:
+  id: e99138c7-de89-428a-8c79-b3d0c02a00e3
+  version: 25
+vcShouldKeepItemLegacyProdMachine: false
+rolename:
+- Analyst
+- ILT Analyst
+- Instance Administrator
+name: GetUserAndManager
+script: |-
+  #print(demisto.args())
+  #print(demisto.getArg("email"))
+  #Get the incident object and print it
+  #incident = demisto.incident()
+  #print(json.dumps(incident, indent=2))
+  #Get the incident owner and print it
+  #incident_owner = demisto.incident().get("owner")
+  #print(incident_owner)
+
+  user_email = demisto.args().get("email")
+  user_info = demisto.executeCommand("xet-ad-get-user", {"email": user_email})
+  manager_dn = user_info[0].get("Contents").get("attributes").get("manager")[0]
+  manager_info = demisto.executeCommand("xet-ad-get-user", {"dn": manager_dn})
+
+  user_name = \
+      user_info[0].get("Contents").get("account").get("DisplayName")[0]
+
+  manager_name = \
+      manager_info[0].get("Contents").get("account").get("DisplayName")[0]
+
+  manager_email = \
+      manager_info[0].get("Contents").get("account").get("Email")[0]
+
+  #Save the results in a dictionary object
+  result = {
+      "UserName": user_name,
+      "UserEmail": user_email,
+      "ManagerName": manager_name,
+      "ManagerEmail": manager_email
+  }
+
+  #Form the markdown string for a readable output
+  human_readable_result = tableToMarkdown(
+      "User and Manager Details",
+      result,
+      headers = [
+          "UserName", "UserEmail", "ManagerName", "ManagerEmail"
+      ]
+  )
+
+  #Produce the results in both the readable format and in the context
+  output = CommandResults(
+      #Markdown string to use as readable output
+      readable_output = human_readable_result,
+      #Name of the key to use as the context data
+      outputs_prefix = "UserAndManager",
+      #Unique key used to determine if the item already exists in context.
+      #If it exists, it will update the corresponding context instead of
+      #creating a new one.
+      outputs_key_field = "UserName",
+      #Data to be returned
+      outputs = result,
+      #Do not auto extract indicators from the output
+      ignore_auto_extract = True
+  )
+
+  #Return the results
+  return_results(output)
+
+
+  #return_results("User's name: " + user_name)
+  #return_results("Manager's name: " + manager_name)
+  #return_results("Manager's email: " + manager_email)
+
+  #print(json.dumps(user_info, indent=2))
+  #return_results(user_info)
+type: python
+tags:
+- incident-action-button
+comment: Lookup a User and the User’s Manager using the User’s Email address.
+enabled: true
+args:
+- name: email
+  required: true
+  description: The email address of the user to lookup.
+outputs:
+- contextPath: UserAndManager.UserName
+  description: Display name of the user
+  type: string
+- contextPath: UserAndManager.ManagerName
+  description: Display name of the manager
+  type: string
+- contextPath: UserAndManager.ManagerEmail
+  description: Email of the manager
+  type: string
+scripttarget: 0
+subtype: python3
+dependson:
+  must:
+  - XSOAR Engineer Training|||xet-get-events
+pswd: ""
+runonce: false
+dockerimage: demisto/python3:3.12.13.9059085
+runas: DBotWeakRole
+engineinfo: {}
+mainengineinfo: {}

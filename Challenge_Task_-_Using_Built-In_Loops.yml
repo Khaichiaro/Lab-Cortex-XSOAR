@@ -1,0 +1,223 @@
+id: c142e928-7d7a-49c1-822c-fb85d2a5768d
+version: 11
+vcShouldKeepItemLegacyProdMachine: false
+name: Challenge Task - Using Built-In Loops
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: e2f6f1fa-34a0-46f4-8a58-a1c89681f615
+    type: start
+    task:
+      id: e2f6f1fa-34a0-46f4-8a58-a1c89681f615
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 65
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "1":
+    id: "1"
+    taskid: 76cbd41f-fe6e-44fe-843d-5e292aa4e4ef
+    type: regular
+    task:
+      id: 76cbd41f-fe6e-44fe-843d-5e292aa4e4ef
+      version: -1
+      name: Set Count Context
+      description: Set a value in context under the key you entered.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "2"
+    scriptarguments:
+      key:
+        simple: Count
+      value:
+        simple: '[1,2,3,4,5]'
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 225
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "2":
+    id: "2"
+    taskid: 17f8249b-05d3-40aa-8d8d-727999741f1f
+    type: playbook
+    task:
+      id: 17f8249b-05d3-40aa-8d8d-727999741f1f
+      version: -1
+      name: Challenge Task Sub Playbook Loops
+      playbookName: Challenge Task Sub Playbook Loops
+      type: playbook
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "4"
+    scriptarguments:
+      query:
+        simple: '{incident.hostnames}'
+    separatecontext: true
+    continueonerrortype: ""
+    loop:
+      iscommand: false
+      exitCondition: ""
+      wait: 1
+      max: 100
+      forEach: true
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 400
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "3":
+    id: "3"
+    taskid: 0f757918-f0d0-4163-89ae-7e9e0412bf84
+    type: condition
+    task:
+      id: 0f757918-f0d0-4163-89ae-7e9e0412bf84
+      version: -1
+      name: Is SIEM Result Found?
+      type: condition
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isExists
+          left:
+            value:
+              simple: siemResult
+            iscontext: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 50
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "4":
+    id: "4"
+    taskid: 9c663a46-28b9-4366-822c-b7a2032ab603
+    type: title
+    task:
+      id: 9c663a46-28b9-4366-822c-b7a2032ab603
+      version: -1
+      name: Done
+      type: title
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 575
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "5":
+    id: "5"
+    taskid: 7547b87a-9fd1-4945-8c6d-0578f4be104d
+    type: regular
+    task:
+      id: 7547b87a-9fd1-4945-8c6d-0578f4be104d
+      version: -1
+      name: Set Count Context
+      description: Set a value in context under the key you entered.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      key:
+        simple: Count
+      value:
+        simple: '[Count:1,Count:2,Count:3,Count:4,Count:5]'
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 225
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 590,
+        "width": 810,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs: []
+quiet: true

@@ -1,0 +1,86 @@
+id: b57c04c9-81a5-49cd-8b23-768470c88670
+version: 5
+vcShouldKeepItemLegacyProdMachine: false
+name: AutoCloseIncident
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: a01e8127-a60d-4b9c-8eec-ff6a2299cf4a
+    type: start
+    task:
+      id: a01e8127-a60d-4b9c-8eec-ff6a2299cf4a
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 50
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "1":
+    id: "1"
+    taskid: b76d6eb0-e7e4-4107-81ad-bce488c8fe28
+    type: regular
+    task:
+      id: b76d6eb0-e7e4-4107-81ad-bce488c8fe28
+      version: -1
+      name: CloseInvestigation
+      description: commands.local.cmd.close.inv
+      script: Builtin|||closeInvestigation
+      type: regular
+      iscommand: true
+      brand: Builtin
+    scriptarguments:
+      closeNotes:
+        simple: fff
+      closeReason:
+        simple: False Positive
+      id:
+        simple: ${incident.id}
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 190
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 235,
+        "width": 380,
+        "x": 450,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs: []
+quiet: true
